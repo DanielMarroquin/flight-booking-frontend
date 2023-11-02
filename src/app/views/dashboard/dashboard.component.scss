@@ -1,0 +1,40 @@
+//.grid-container {
+//  margin: 20px;
+//}
+
+:host {
+  display: block;
+  height: 100%;
+}
+
+
+.grid-container {
+  margin: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-gap: 20px;
+}
+
+
+.dashboard-card {
+  margin: 15px;
+}
+
+
+//.dashboard-card {
+//  position: absolute;
+//  top: 15px;
+//  left: 15px;
+//  right: 15px;
+//  bottom: 15px;
+//}
+
+.more-button {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+}
+
+.dashboard-card-content {
+  text-align: center;
+}
