@@ -7,8 +7,6 @@ import { ClientsComponent } from "./views/clients-admin/views/clients/clients.co
 
 
 const routes: Routes = [
-
-  // { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
   { path: 'flights', component: FlightsComponent},

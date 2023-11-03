@@ -1,31 +1,40 @@
-import { Component } from '@angular/core';
-import { Page } from '../../../../core/models/table.model';
+import { Component, OnInit } from '@angular/core';
+import { BookingService } from "../../../../core/services/booking.service";
 
 @Component({
   selector: 'app-booking',
   templateUrl: './booking.component.html',
   styleUrls: ['./booking.component.scss']
 })
-export class BookingComponent {
+export class BookingComponent implements OnInit {
 
-  table: any = {
-    column: [
-      { name: 'N.- Vuelo', prop: 'document' },
-      { name: 'Asiento reservado', prop: 'fullName' },
-      { name: 'Total Precio', prop: 'username' },
-      { name: 'Hora de Reserva', prop: 'email' },
-      { name: 'Cliente', prop: 'email' },
-    ],
-    rows: new Array<[]>(),
-    isLoading: false,
-  };
+  displayedColumns: any[] = [
+    { key: 'flightId', value: 'Código de Vuelo' },
+    { key: 'seatsBooked', value: 'Número de Asiento ' },
+    { key: 'totalPrice', value: 'Costo Final Ticket' },
+    { key: 'reservationTime', value: 'Fecha de Reserva' },
+    { key: 'clientId', value: 'Número de Cliente' },
 
-  tablePage = new Page();
-  filter = {
-    fullName: null
-  };
-  constructor() {
-    this.tablePage.pageNumber = 0;
-    this.tablePage.size = 10;
+  ];
+
+  dataSource: any[] = [];
+
+  constructor(
+    private booking: BookingService
+  ) {
+  }
+
+  ngOnInit(): void {
+    this.loadTableBooking();
+  }
+
+  getColumnKeys(): string[] {
+    return this.displayedColumns.map((column) => column.key);
+  }
+
+  loadTableBooking(): void {
+    this.booking.findAllBooking().subscribe((data) => {
+      this.dataSource = data;
+    });
   }
 }

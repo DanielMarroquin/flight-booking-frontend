@@ -7,11 +7,15 @@ import { NgxDatatableModule } from "@swimlane/ngx-datatable";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
+import { FormModalFlightsComponent } from './components/form-modal-flights.component';
+import { MatDialogModule } from "@angular/material/dialog";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 
 @NgModule({
   declarations: [
-    FlightsComponent
+    FlightsComponent,
+    FormModalFlightsComponent
   ],
   imports: [
     CommonModule,
@@ -20,6 +24,9 @@ import { MatIconModule } from "@angular/material/icon";
     MatButtonModule,
     MatCardModule,
     MatIconModule,
+    MatDialogModule,
+    ReactiveFormsModule,
+    FormsModule,
   ]
 })
 export class FlightsAdminModule { }

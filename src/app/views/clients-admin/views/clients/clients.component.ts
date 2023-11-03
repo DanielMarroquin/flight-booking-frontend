@@ -1,29 +1,41 @@
-import { Component } from '@angular/core';
-import { Page } from '../../../../core/models/table.model';
+import { Component, OnInit } from '@angular/core';
+import { ClientsService } from "../../../../core/services/clients.service";
 
 @Component({
   selector: 'app-clients',
   templateUrl: './clients.component.html',
   styleUrls: ['./clients.component.scss']
 })
-export class ClientsComponent {
-  table: any = {
-    column: [
-      { name: 'Identificación', prop: 'document' },
-      { name: 'Nombre', prop: 'fullName' },
-      { name: 'Username', prop: 'username' },
-      { name: 'Email', prop: 'email' },
-    ],
-    rows: new Array<[]>(),
-    isLoading: false,
-  };
+export class ClientsComponent implements OnInit {
+  displayedColumns: any[] = [
+    { key: 'firstName', value: 'Nombre Cliente' },
+    { key: 'lastName', value: 'Apellido Cliente ' },
+    { key: 'email', value: 'Correo Electronico' },
+    { key: 'phoneNumber', value: 'Telefono Contacto' },
+    { key: 'createdAt', value: 'Fecha Creacio' },
 
-  tablePage = new Page();
-  filter = {
-    fullName: null
-  };
-  constructor() {
-    this.tablePage.pageNumber = 0;
-    this.tablePage.size = 10;
+  ];
+
+  dataSource: any[] = [];
+  filteredData: any[] = [];
+
+  constructor(
+    private clients: ClientsService
+  ) {}
+
+  ngOnInit(): void {
+    this.loadTableClients();
   }
+
+  getColumnKeys(): string[] {
+    return this.displayedColumns.map((column) => column.key);
+  }
+  loadTableClients(): void {
+    this.clients.findAllClients().subscribe((data) => {
+      this.dataSource = data;
+    });
+  }
+
+
+
 }

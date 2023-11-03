@@ -1,68 +1,92 @@
 import { Component, OnInit } from '@angular/core';
-import { Page } from '../../../../core/models/table.model';
 import { FlightsServiceService } from "../../../../core/services/flights.service.service";
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import Swal from 'sweetalert2';
+import { FormModalFlightsComponent } from "../../components/form-modal-flights.component";
+
 
 @Component({
   selector: 'app-flights',
   templateUrl: './flights.component.html',
-  styleUrls: ['./flights.component.scss']
+  styleUrls: ['./flights.component.scss'],
+  providers: [MatSnackBar]
 })
 
+export class FlightsComponent implements OnInit {
 
+  displayedColumns: any[] = [
+    { key: 'actions', value: 'Reservar Viaje'},
+    { key: 'origin', value: 'Ciudad Origen' },
+    { key: 'destination', value: 'Ciudad Destino' },
+    { key: 'departureTime', value: 'Fecha de Salida' },
+    { key: 'arrivalTime', value: 'Fecha de Arrivo' },
+    { key: 'price', value: 'Precio Ticket' },
+    { key: 'isAvailable', value: 'Disponibilidad de Vuelo' },
+  ];
+  dataSource: any[] = [];
 
-export class FlightsComponent implements OnInit{
-
-  table: any = {
-    column: [
-      { name: 'Origen', prop: 'document' },
-      { name: 'Destino', prop: 'fullName' },
-      { name: 'Hora de Salida', prop: 'username' },
-      { name: 'Hora de Llegada', prop: 'email' },
-      { name: 'Precio', prop: 'email' },
-      { name: 'Disponibilidad', prop: 'email' },
-    ],
-    rows: new Array<[]>(),
-    isLoading: false,
-  }
-
-  tableDate: any;
-
-  rowHeight = 30;
-
-  columnMode = 'flex';
-
-  tablePage = new Page();
-  filter = {
-    fullName: null
-  };
   constructor(
-    private flightService: FlightsServiceService
-  ) {
-    this.tablePage.pageNumber = 0;
-    this.tablePage.size = 10;
+    private flightService: FlightsServiceService,
+    private modalService: NgbModal,
+    private snackBar: MatSnackBar,
+  ) {}
+
+  ngOnInit(): void {
+    this.loadTableFlights();
   }
 
-  ngOnInit() {
-    console.log(this.loadTableList());
+  getColumnKeys(): string[] {
+    return this.displayedColumns.map((column) => column.key);
+  }
+
+  getColor(value: number): string {
+    if (value === 0) {
+      return 'red';
+    } else {
+      return 'green';
+    }
+  }
+
+  loadTableFlights(): void {
+    this.flightService.findAllFlights().subscribe((data) => {
+      this.dataSource = data;
+    });
   }
 
 
+  openModal(element: any) {
+    if (element.isAvailable === 1 ) {
+      const componentRef = this.modalService.open(FormModalFlightsComponent, {
+        ariaLabelledBy: 'modal-basic-title',
+        size: 'lg',
+        centered: true,
+      });
 
-    loadTableList(): void {
-    const page = 1; // Reemplaza esto con el número de página que desees cargar
-    const pageSize = 10; // Reemplaza esto con el tamaño de página que desees cargar
+      componentRef.componentInstance.data = element;
 
-    this.flightService.findAllFlights(page, pageSize).subscribe(
-        (response) => {
-          // Aquí puedes manejar la respuesta y asignar los datos a una variable que utilizarás en tu plantilla
-          this.tableDate = response; // Asegúrate de tener una variable llamada tableData en tu componente
-        },
-        (error) => {
-          // Maneja el error aquí
-          console.error('Error fetching flights:', error);
+      componentRef.closed.subscribe(reason => {
+        if (reason == 'success') {
+          Swal.fire(
+            'Buen Trabajo',
+            'Su vuelo se ha reservado con éxito!',
+            'success'
+          );
+          this.loadTableFlights();
         }
-    );
+      });
+    } else {
+      Swal.fire(
+        'Cancelado',
+        'Mil disculpas vuelvo no disponible..!!',
+        'error'
+      );
+    }
+
+
+
   }
+
 
 
 }

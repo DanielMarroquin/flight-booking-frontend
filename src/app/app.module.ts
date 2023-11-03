@@ -27,6 +27,9 @@ import { MatPaginatorModule } from "@angular/material/paginator";
 import { BookingComponent } from "./views/reservartion-admin/views/booking/booking.component";
 import { ClientsComponent } from "./views/clients-admin/views/clients/clients.component";
 import { HttpClientModule } from "@angular/common/http";
+import { MatDialogModule } from "@angular/material/dialog";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -36,9 +39,10 @@ import { HttpClientModule } from "@angular/common/http";
     NavigationComponent,
     HomeComponent,
     BookingComponent,
-    ClientsComponent
+    ClientsComponent,
   ],
   imports: [
+    MatDialogModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -58,7 +62,10 @@ import { HttpClientModule } from "@angular/common/http";
     MatTableModule,
     NgxDatatableModule,
     MatPaginatorModule,
-    HttpClientModule
+    HttpClientModule,
+    MatSnackBarModule,
+    NgbModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
